@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TARGET_REQ=requirements
+    env_file:
+      - .env
+    ports:
+      - '8081:8081'
+    depends_on:
+      - database
+  database:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=cashflow
+      - POSTGRES_PASSWORD=3W9vLA
+      - POSTGRES_DB=cashflow
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  unit-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TARGET_REQ=requirements-dev
+    command: ["python", "-m", "pytest"]
+  lint:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TARGET_REQ=requirements-dev
+    command: "flake8"

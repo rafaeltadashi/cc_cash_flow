@@ -1,0 +1,5 @@
+databases[postgresql]
+fastapi
+psycopg2
+sqlalchemy
+uvicorn[standard]
